@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lumin Digital &times; Bhanu Kumar &middot; Proof of Work</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+
+:root{
+  --bg:       #0a0c10;
+  --bg2:      #0f1216;
+  --bg3:      #141820;
+  --bg4:      #191f29;
+  --bg5:      #202836;
+  --bdr:      rgba(255,255,255,0.07);
+  --bmd:      rgba(255,255,255,0.13);
+  --blg:      rgba(255,255,255,0.22);
+  --t1:       #eef0f4;
+  --t2:       #939ba9;
+  --t3:       #545c69;
+  --amber:       #e8a94c;
+  --amber-dim:   rgba(232,169,76,0.10);
+  --amber-glow:  rgba(232,169,76,0.24);
+  --amber-t:     #f2c785;
+  --teal:        #52c9a8;
+  --teal-dim:    rgba(82,201,168,0.10);
+  --teal-t:      #8fe0c8;
+  --red:         #e37a6f;
+  --red-dim:     rgba(227,122,111,0.09);
+}
+
+html{scroll-behavior:smooth;scroll-padding-top:66px;}
+body{
+  background:var(--bg);color:var(--t1);
+  font-family:'Inter',system-ui,sans-serif;
+  font-size:16px;line-height:1.7;font-weight:400;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden;
+}
+
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(620px 440px at 12% -8%, rgba(232,169,76,0.06), transparent 60%),
+    radial-gradient(560px 400px at 100% 6%, rgba(82,201,168,0.045), transparent 60%);
+}
+
+::selection{background:var(--amber-dim);color:var(--t1);}
+a{color:inherit;}
+img,svg{display:block;}
+
+/* ===== PROGRESS BAR ===== */
+.pbar{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,var(--amber),var(--teal));z-index:500;width:0%;transition:width 0.1s linear;}
+
+/* ===== NAV ===== */
+.nav{position:sticky;top:0;z-index:300;background:rgba(10,12,16,0.92);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-bottom:1px solid var(--bdr);padding:0 5vw;}
+.nav-i{max-width:1180px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:60px;gap:16px;}
+.nav-brand{font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--t1);letter-spacing:0.02em;white-space:nowrap;display:flex;align-items:center;gap:8px;text-decoration:none;}
+.nav-brand .dot{width:6px;height:6px;border-radius:50%;background:var(--amber);box-shadow:0 0 0 0 var(--amber-glow);animation:dotpulse 2.6s ease-in-out infinite;}
+@keyframes dotpulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.45;transform:scale(0.72);}}
+.nav-brand b{font-weight:500;color:var(--t1);}
+.nav-brand span{color:var(--t3);}
+.nav-links{display:flex;gap:2px;flex-wrap:wrap;}
+.np{font-size:12px;font-weight:500;padding:6px 12px;border-radius:6px;border:1px solid transparent;color:var(--t2);background:transparent;text-decoration:none;transition:all 0.13s;white-space:nowrap;font-family:'IBM Plex Mono',monospace;letter-spacing:0.01em;}
+.np:hover{border-color:var(--bdr);color:var(--t1);background:var(--bg3);}
+.np.cta{background:var(--amber);border-color:var(--amber);color:#241505;font-weight:600;margin-left:6px;}
+.np.cta:hover{opacity:0.88;}
+.hbg{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;padding:4px;flex-shrink:0;}
+.hbg span{display:block;width:20px;height:1.5px;background:var(--t1);border-radius:2px;transition:transform .3s,opacity .3s;}
+.hbg.open span:nth-child(1){transform:translateY(6.5px) rotate(45deg);}
+.hbg.open span:nth-child(2){opacity:0;}
+.hbg.open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg);}
+.mob-menu{display:none;position:fixed;inset:0;top:60px;background:var(--bg);z-index:290;flex-direction:column;padding:26px 5vw;gap:0;border-top:1px solid var(--bdr);}
+.mob-menu.open{display:flex;}
+.mob-menu a{display:block;font-size:18px;font-family:'Fraunces',serif;font-style:italic;font-weight:400;color:var(--t1);text-decoration:none;padding:15px 0;border-bottom:1px solid var(--bdr);}
+.mob-menu a:last-child{border-bottom:none;}
+.mob-menu a.mcta{color:var(--amber-t);}
+@media(max-width:760px){.nav-links{display:none;}.hbg{display:flex;}}
+
+/* ===== WRAPPER ===== */
+.wrap{max-width:1180px;margin:0 auto;padding:0 5vw;position:relative;z-index:1;}
+section.part{padding:84px 0;border-bottom:1px solid var(--bdr);}
+.rv{opacity:0;transform:translateY(14px);transition:opacity 0.55s ease,transform 0.55s ease;}
+.rv.in{opacity:1;transform:none;}
+
+/* ===== HERO ===== */
+.hero{padding:86px 5vw 76px;max-width:1180px;margin:0 auto;position:relative;z-index:1;border-bottom:1px solid var(--bdr);}
+.hero-eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11.5px;font-weight:500;letter-spacing:0.13em;text-transform:uppercase;color:var(--t3);margin-bottom:22px;}
+.hero-hed{font-family:'Fraunces',serif;font-weight:500;font-style:normal;font-size:clamp(32px,5.6vw,58px);line-height:1.1;letter-spacing:-0.01em;color:var(--t1);margin-bottom:18px;max-width:840px;}
+.hero-hed em{font-style:italic;color:var(--amber-t);font-weight:400;}
+.hero-sub{font-size:clamp(15px,1.6vw,17px);color:var(--t2);max-width:600px;line-height:1.7;margin-bottom:44px;font-weight:400;}
+.hero-sub strong{color:var(--t1);font-weight:600;}
+
+/* ===== COMPOUNDING SIMULATOR (hero interaction) ===== */
+.sim-caption{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--t3);letter-spacing:0.04em;margin-bottom:14px;}
+.sim{background:var(--bg2);border:1px solid var(--bdr);border-radius:14px;padding:26px 26px 22px;margin-bottom:14px;}
+.sim-top{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:14px;margin-bottom:18px;}
+.sim-label{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.09em;text-transform:uppercase;color:var(--t3);margin-bottom:6px;}
+.sim-value{font-family:'Fraunces',serif;font-size:clamp(26px,4vw,36px);font-weight:500;color:var(--amber-t);line-height:1;}
+.sim-value small{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--t2);font-weight:400;margin-left:6px;}
+.sim-gap{text-align:right;}
+.sim-gap .sim-label{color:var(--t3);}
+.sim-gap-value{font-family:'IBM Plex Mono',monospace;font-size:18px;color:var(--teal-t);font-weight:600;}
+
+.chart-box{position:relative;width:100%;height:200px;margin-bottom:10px;}
+.chart-flat, .chart-reveal{position:absolute;top:0;left:0;width:100%;height:100%;}
+.chart-reveal{overflow:hidden;width:0%;will-change:width;}
+.chart-reveal svg, .chart-flat svg{width:600px;max-width:none;height:100%;}
+.chart-flat svg{width:100%;}
+.playhead{position:absolute;top:0;bottom:0;left:0%;width:1px;background:var(--amber);opacity:0.55;will-change:left;pointer-events:none;}
+.playhead::after{content:'';position:absolute;top:-3px;left:-3.5px;width:8px;height:8px;border-radius:50%;background:var(--amber);box-shadow:0 0 0 3px var(--amber-glow);}
+
+.sim-ctrl{display:flex;align-items:center;gap:14px;}
+input[type=range].year-slider{-webkit-appearance:none;appearance:none;flex:1;height:3px;border-radius:3px;background:linear-gradient(90deg,var(--amber),var(--teal));outline:none;cursor:pointer;}
+input[type=range].year-slider::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:var(--t1);border:3px solid var(--amber);cursor:grab;}
+input[type=range].year-slider::-moz-range-thumb{width:14px;height:14px;border-radius:50%;background:var(--t1);border:3px solid var(--amber);cursor:grab;}
+.sim-year{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--t2);white-space:nowrap;min-width:52px;}
+.sim-legend{display:flex;gap:18px;margin-top:16px;flex-wrap:wrap;}
+.leg-item{display:flex;align-items:center;gap:7px;font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--t2);}
+.leg-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;}
+.sim-foot{font-size:12.5px;color:var(--t3);line-height:1.6;margin-top:4px;}
+
+@media(max-width:640px){
+  .sim-top{flex-direction:column;}
+  .sim-gap{text-align:left;}
+}
+
+/* ===== SECTION HEADERS ===== */
+.sec-label{display:flex;align-items:baseline;gap:10px;margin-bottom:20px;}
+.sec-num{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--t3);letter-spacing:0.08em;}
+.sec-title{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.13em;text-transform:uppercase;color:var(--amber-t);}
+.part-h{font-family:'Fraunces',serif;font-weight:500;font-size:clamp(24px,3.4vw,34px);line-height:1.22;letter-spacing:-0.01em;color:var(--t1);margin-bottom:16px;max-width:800px;}
+.part-lead{font-size:15.5px;color:var(--t2);max-width:680px;line-height:1.75;margin-bottom:38px;}
+.part-lead strong{color:var(--t1);font-weight:600;}
+
+/* ===== TABS ===== */
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:26px;}
+.tab{font-family:'IBM Plex Mono',monospace;font-size:12px;padding:9px 15px;border-radius:8px;border:1px solid var(--bdr);background:var(--bg2);color:var(--t2);cursor:pointer;transition:all .15s;}
+.tab:hover{border-color:var(--bmd);color:var(--t1);}
+.tab.on{background:var(--amber-dim);border-color:rgba(232,169,76,0.35);color:var(--amber-t);}
+.tab.on.teal{background:var(--teal-dim);border-color:rgba(82,201,168,0.35);color:var(--teal-t);}
+.tpanel{display:none;}
+.tpanel.on{display:block;}
+.panel-box{background:var(--bg2);border:1px solid var(--bdr);border-radius:12px;padding:22px 24px;margin-bottom:14px;}
+.panel-box.gold{border-color:rgba(232,169,76,0.28);background:linear-gradient(180deg,var(--amber-dim),var(--bg2) 60%);}
+.panel-tag{display:block;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:0.06em;text-transform:uppercase;color:var(--t3);margin-bottom:10px;}
+.panel-body{font-size:14.5px;color:var(--t2);line-height:1.75;}
+.panel-body strong{color:var(--t1);}
+
+/* ===== AUDIT (before / after) ===== */
+.audit-card{background:var(--bg2);border:1px solid var(--bdr);border-radius:12px;padding:24px 24px 22px;margin-bottom:18px;}
+.audit-head{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.06em;text-transform:uppercase;color:var(--t3);margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.audit-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+@media(max-width:760px){.audit-grid{grid-template-columns:1fr;}}
+.audit-col-h{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:0.07em;text-transform:uppercase;margin-bottom:8px;}
+.audit-col-h.cur{color:var(--t3);}
+.audit-col-h.rw{color:var(--amber-t);}
+.audit-txt{font-size:14px;color:var(--t2);line-height:1.7;padding:14px 16px;border-radius:8px;background:var(--bg3);border:1px solid var(--bdr);}
+.audit-txt.rw{background:var(--amber-dim);border-color:rgba(232,169,76,0.25);color:var(--t1);}
+.audit-why{font-size:13.5px;color:var(--t3);line-height:1.7;margin-top:14px;padding-top:14px;border-top:1px solid var(--bdr);}
+.audit-why strong{color:var(--t2);}
+
+/* ===== PERSONAS ===== */
+.persona-picker{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:26px;}
+@media(max-width:700px){.persona-picker{grid-template-columns:1fr;}}
+.p-card{background:var(--bg2);border:1px solid var(--bdr);border-radius:12px;padding:18px 18px 16px;cursor:pointer;transition:all .15s;text-align:left;}
+.p-card:hover{border-color:var(--bmd);}
+.p-card.on{border-color:rgba(232,169,76,0.4);background:linear-gradient(180deg,var(--amber-dim),var(--bg2));}
+.p-icon{font-size:20px;margin-bottom:10px;}
+.p-title{font-family:'Fraunces',serif;font-size:17px;font-weight:500;color:var(--t1);margin-bottom:6px;}
+.p-sub{font-size:12.5px;color:var(--t3);line-height:1.5;}
+.p-detail{display:none;}
+.p-detail.on{display:block;}
+.p-row{display:grid;grid-template-columns:180px 1fr;gap:18px;padding:16px 0;border-bottom:1px solid var(--bdr);}
+.p-row:last-child{border-bottom:none;}
+@media(max-width:700px){.p-row{grid-template-columns:1fr;gap:6px;}}
+.p-row-label{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.04em;text-transform:uppercase;color:var(--teal-t);}
+.p-row-body{font-size:14.5px;color:var(--t2);line-height:1.75;}
+.p-row-body strong{color:var(--t1);}
+
+/* ===== COMP TABLE ===== */
+.comp-table{border:1px solid var(--bdr);border-radius:12px;overflow:hidden;margin-bottom:18px;}
+.comp-row{display:grid;grid-template-columns:1fr 1.3fr 1.5fr;border-bottom:1px solid var(--bdr);}
+.comp-row:last-child{border-bottom:none;}
+.comp-head-row{background:var(--bg3);}
+.comp-head-row .comp-cell{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:0.06em;text-transform:uppercase;color:var(--t3);}
+.comp-cell{padding:16px 18px;font-size:13.5px;color:var(--t2);line-height:1.6;border-right:1px solid var(--bdr);}
+.comp-cell:last-child{border-right:none;}
+.comp-tool{font-family:'IBM Plex Mono',monospace;font-weight:600;color:var(--t1);font-size:13.5px;}
+@media(max-width:820px){
+  .comp-row{grid-template-columns:1fr;}
+  .comp-cell{border-right:none;border-bottom:1px solid var(--bdr);}
+  .comp-row .comp-cell:last-child{border-bottom:none;}
+}
+.pull{font-family:'Fraunces',serif;font-style:italic;font-size:19px;color:var(--t1);line-height:1.6;border-left:2px solid var(--amber);padding-left:20px;max-width:760px;}
+
+/* ===== BATTLECARD ===== */
+.bcard{background:var(--bg2);border:1px solid var(--bdr);border-radius:12px;overflow:hidden;}
+.bcard-q{padding:20px 24px;background:var(--bg3);border-bottom:1px solid var(--bdr);font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--t2);}
+.bcard-q strong{color:var(--t1);}
+.bcard-a{padding:22px 24px;font-size:14.5px;color:var(--t2);line-height:1.8;}
+.bcard-a strong{color:var(--t1);}
+.bcard-then{padding:16px 24px;border-top:1px solid var(--bdr);font-size:13px;color:var(--t3);font-family:'IBM Plex Mono',monospace;}
+.bcard-why{padding:0 24px 22px;font-size:13.5px;color:var(--t3);line-height:1.7;}
+.bcard-why strong{color:var(--t2);}
+
+/* ===== METRICS ===== */
+.metrics-head{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:10px;margin-bottom:20px;}
+.metrics-sub{font-size:13px;color:var(--t3);}
+.metrics-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;}
+@media(max-width:980px){.metrics-grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:520px){.metrics-grid{grid-template-columns:1fr;}}
+.metric-card{background:var(--bg2);border:1px solid var(--bdr);border-radius:10px;padding:16px 16px 14px;}
+.metric-cat{display:block;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.06em;text-transform:uppercase;color:var(--teal-t);margin-bottom:8px;}
+.metric-card p{font-size:13px;color:var(--t2);line-height:1.55;}
+
+/* ===== OTHER WORK ===== */
+.wgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;}
+@media(max-width:760px){.wgrid{grid-template-columns:1fr;}}
+.wcard{display:block;background:var(--bg2);border:1px solid var(--bdr);border-radius:12px;padding:20px 22px;text-decoration:none;transition:all .15s;position:relative;}
+.wcard:hover{border-color:var(--bmd);background:var(--bg3);}
+.wcard-tag{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:0.05em;text-transform:uppercase;color:var(--t3);display:block;margin-bottom:8px;}
+.wcard h4{font-family:'Fraunces',serif;font-size:18px;font-weight:500;color:var(--t1);margin-bottom:8px;}
+.wcard p{font-size:13.5px;color:var(--t2);line-height:1.6;}
+.wcard-arr{position:absolute;top:20px;right:20px;color:var(--t3);transition:transform .15s;}
+.wcard:hover .wcard-arr{transform:translateX(3px);color:var(--amber-t);}
+.wcard.full{grid-column:1/-1;}
+
+/* ===== SIGNATURE ===== */
+.sig{padding:60px 0 32px;display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:24px;}
+.sig-name{font-family:'Fraunces',serif;font-size:26px;font-weight:500;color:var(--t1);margin-bottom:8px;}
+.sig-name span{color:var(--t3);font-weight:400;}
+.sig-links{font-size:13px;color:var(--t3);line-height:1.9;}
+.sig-links a{text-decoration:none;color:var(--t2);}
+.sig-links a:hover{color:var(--amber-t);}
+.sig-btns{display:flex;gap:10px;flex-wrap:wrap;}
+.sbtn{font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:500;padding:11px 20px;border-radius:8px;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:opacity .15s;}
+.sbtn.pri{background:var(--amber);color:#241505;}
+.sbtn.pri:hover{opacity:0.88;}
+.sbtn.ghost{border:1px solid var(--bdr);color:var(--t2);}
+.sbtn.ghost:hover{border-color:var(--bmd);color:var(--t1);}
+.note{font-size:12px;color:var(--t3);line-height:1.7;padding-bottom:50px;max-width:820px;}
+</style>
+</head>
+<body>
+
+<div class="pbar" id="pbar"></div>
+
+<nav class="nav">
+  <div class="nav-i">
+    <a href="#" class="nav-brand"><span class="dot"></span><b>Bhanu Kumar</b><span>&middot; Lumin Digital</span></a>
+    <div class="nav-links">
+      <a class="np" href="#narrative">Narrative</a>
+      <a class="np" href="#personas">Personas</a>
+      <a class="np" href="#competitive">Competitive</a>
+      <a class="np" href="#enablement">Enablement</a>
+      <a class="np" href="#metrics">Metrics</a>
+      <a class="np" href="#work">Other Work</a>
+      <a class="np cta" href="mailto:bhanukumar0902@gmail.com">Say hello</a>
+    </div>
+    <button class="hbg" id="hbg" onclick="toggleMob()"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+<div class="mob-menu" id="mobm">
+  <a href="#narrative" onclick="closeMob()">Narrative</a>
+  <a href="#personas" onclick="closeMob()">Personas</a>
+  <a href="#competitive" onclick="closeMob()">Competitive</a>
+  <a href="#enablement" onclick="closeMob()">Enablement</a>
+  <a href="#metrics" onclick="closeMob()">Metrics</a>
+  <a href="#work" onclick="closeMob()">Other Work</a>
+  <a class="mcta" href="mailto:bhanukumar0902@gmail.com" onclick="closeMob()">Say hello &rarr;</a>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow rv">Proof of Work &middot; Product Marketing &middot; Lumin Digital</div>
+  <h1 class="hero-hed rv">How I&rsquo;d position Lumin Solaire: the story, the personas, the battlecard, and the proof.</h1>
+  <p class="hero-sub rv">Solaire went from a quiet launch to Lumination&rsquo;s centerpiece in five months. Here&rsquo;s how I&rsquo;d carry that to the people who sign: <strong>the story, the buying committee, the competitive answer, and the proof.</strong></p>
+
+  <div class="sim-caption rv">The claim Lumin already makes, run as an actual model:</div>
+  <div class="sim rv" id="sim">
+    <div class="sim-top">
+      <div>
+        <span class="sim-label">Client-attributable value, year <span id="simYearLabel">1</span></span>
+        <div class="sim-value">$<span id="simValueLabel">1.6</span>M <small>per FI, per S&amp;P study</small></div>
+      </div>
+      <div class="sim-gap">
+        <span class="sim-label">Gap vs. a flat, cost-only model</span>
+        <div class="sim-gap-value">+$<span id="simGapLabel">0.0</span>M</div>
+      </div>
+    </div>
+    <div class="chart-box">
+      <div class="chart-flat">
+        <svg viewBox="0 0 600 200" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+          <line x1="60" y1="158" x2="560" y2="158" stroke="#545c69" stroke-width="2" stroke-dasharray="5 6" opacity="0.6"/>
+          <circle cx="60" cy="158" r="3.5" fill="#545c69"/>
+          <circle cx="560" cy="158" r="3.5" fill="#545c69"/>
+        </svg>
+      </div>
+      <div class="chart-reveal" id="chartReveal">
+        <svg viewBox="0 0 600 200" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+          <polyline points="60,158 185,144 310,124 435,94 560,54" fill="none" stroke="#e8a94c" stroke-width="2.5"/>
+          <circle cx="60" cy="158" r="4" fill="#e8a94c"/>
+          <circle cx="185" cy="144" r="4" fill="#e8a94c"/>
+          <circle cx="310" cy="124" r="4" fill="#e8a94c"/>
+          <circle cx="435" cy="94" r="4" fill="#e8a94c"/>
+          <circle cx="560" cy="54" r="4.5" fill="#e8a94c"/>
+        </svg>
+      </div>
+      <div class="playhead" id="playhead"></div>
+    </div>
+    <div class="sim-ctrl">
+      <span class="sim-year">Year 1</span>
+      <input type="range" class="year-slider" id="yearSlider" min="1" max="5" step="0.01" value="1">
+      <span class="sim-year">Year 5</span>
+    </div>
+    <div class="sim-legend">
+      <span class="leg-item"><span class="leg-dot" style="background:#e8a94c;"></span>Lumin: compounding growth</span>
+      <span class="leg-item"><span class="leg-dot" style="background:#545c69;"></span>Flat, cost-savings-only model</span>
+    </div>
+    <div class="sim-foot">Year 1 and year 5 are 451 Research&rsquo;s published figures for Lumin&rsquo;s client base: $1.6M rising to $6.8M, a 44% CAGR. Years 2 through 4 are my interpolation at that rate, not separately disclosed. The flat line is an illustrative cost-only comparison, not a competitor&rsquo;s real number.</div>
+  </div>
+</div>
+
+<!-- ============ 01 NARRATIVE ============ -->
+<section class="part" id="narrative">
+  <div class="wrap">
+    <div class="sec-label rv"><span class="sec-num">01</span><span class="sec-title">The Narrative</span></div>
+    <h2 class="part-h rv">Solaire is proof the flywheel already turns. Right now it reads like a separate AI announcement.</h2>
+    <p class="part-lead rv">Lumin has the receipts: near 90 NPS, zero client churn, an independent study proving value compounds instead of flattening out. Solaire should be the clearest evidence of that thesis. Three surfaces currently undersell it.</p>
+
+    <div class="audit-card rv">
+      <div class="audit-head">Surface 01 &middot; lumindigital.com homepage</div>
+      <div class="audit-grid">
+        <div>
+          <div class="audit-col-h cur">Current</div>
+          <div class="audit-txt">A capability list, retail banking, commercial banking, AI, weekly updates, then usage stats underneath. Reads like an inventory, not a reason to care.</div>
+        </div>
+        <div>
+          <div class="audit-col-h rw">I&rsquo;d replace it with</div>
+          <div class="audit-txt rw">The 451 Research finding itself, stated as the headline: <strong>Lumin is the platform proven to get more valuable every year, not less.</strong> Not a tagline. The study already sits on this site.</div>
+        </div>
+      </div>
+      <div class="audit-why"><strong>Why:</strong> the homepage buries its strongest asset under a feature list any competitor could also claim.</div>
+    </div>
+
+    <div class="audit-card rv">
+      <div class="audit-head">Surface 02 &middot; Lumin Solaire launch language</div>
+      <div class="audit-grid">
+        <div>
+          <div class="audit-col-h cur">Current</div>
+          <div class="audit-txt">Leads with architecture: &ldquo;built from the ground up, not retrofitted,&rdquo; on a &ldquo;unified data foundation.&rdquo; Right for a CTO. Not what a credit union president repeats to their board.</div>
+        </div>
+        <div>
+          <div class="audit-col-h rw">I&rsquo;d replace it with</div>
+          <div class="audit-txt rw">One buyer-facing line, right after the architecture claim: <strong>&ldquo;The model doesn&rsquo;t reset every time you add a feature.&rdquo;</strong> That&rsquo;s what &ldquo;not retrofitted&rdquo; means to whoever signs the contract.</div>
+        </div>
+      </div>
+      <div class="audit-why"><strong>Why:</strong> the architecture claim is real. It just stops one sentence short of the board.</div>
+    </div>
+
+    <div class="audit-card rv">
+      <div class="audit-head">Surface 03 &middot; Solaire Assist, December 2025</div>
+      <div class="audit-grid">
+        <div>
+          <div class="audit-col-h cur">Current</div>
+          <div class="audit-txt">Target Manager Assistant, Secure Form Assistant, FAQ Assistant, framed as time-savers. Accurate, filed under operational efficiency.</div>
+        </div>
+        <div>
+          <div class="audit-col-h rw">I&rsquo;d replace it with</div>
+          <div class="audit-txt rw">A re-launch as <strong>proof, not a feature update:</strong> the first live evidence the compounding-growth architecture already runs in production, months before conversational AI even ships.</div>
+        </div>
+      </div>
+      <div class="audit-why"><strong>Why:</strong> Lumin&rsquo;s strongest answer to &ldquo;every vendor says they&rsquo;re doing AI&rdquo; is currently marketed like a minor release.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 02 PERSONAS ============ -->
+<section class="part" id="personas">
+  <div class="wrap">
+    <div class="sec-label rv"><span class="sec-num">02</span><span class="sec-title">Buyer Personas</span></div>
+    <h2 class="part-h rv">One deal, three very different questions about the same platform</h2>
+    <p class="part-lead rv">FIs buy Lumin as a committee, not a person. Here are the three seats at that table, based on roles across Lumin&rsquo;s own case studies, and what each one needs to hear.</p>
+
+    <div class="persona-picker rv" id="personaPicker">
+      <button class="p-card on" data-p="growth" onclick="setPersona('growth', this)">
+        <div class="p-icon">&#128200;</div>
+        <div class="p-title">The Growth Mandate</div>
+        <div class="p-sub">President / CEO. Owns the board case for why members pick them over a megabank.</div>
+      </button>
+      <button class="p-card" data-p="risk" onclick="setPersona('risk', this)">
+        <div class="p-icon">&#128274;</div>
+        <div class="p-title">The Migration Risk Owner</div>
+        <div class="p-sub">CTO / CIO. Owns what happens the week after signing.</div>
+      </button>
+      <button class="p-card" data-p="member" onclick="setPersona('member', this)">
+        <div class="p-icon">&#10024;</div>
+        <div class="p-title">The Member Experience Owner</div>
+        <div class="p-sub">CXO / Chief Innovation Officer. Owns whether AI feels like help or theater.</div>
+      </button>
+    </div>
+
+    <div class="p-detail on" id="p-growth">
+      <div class="panel-box gold">
+        <div class="p-row">
+          <div class="p-row-label">What they ask</div>
+          <div class="p-row-body">&ldquo;We&rsquo;re a $3.5B community bank competing with names members already trust. What does this get us that a bigger, cheaper name doesn&rsquo;t?&rdquo;</div>
+        </div>
+        <div class="p-row">
+          <div class="p-row-label">What worries them</div>
+          <div class="p-row-body">Every RFP demo, Alkami included, promises modern and AI-enabled. They need one number that isn&rsquo;t marketing.</div>
+        </div>
+        <div class="p-row">
+          <div class="p-row-label">I&rsquo;d lead with</div>
+          <div class="p-row-body">The one stat that reframes the deal: <strong>75% of platform value comes from revenue growth, not cost reduction.</strong> That moves the conversation from cheapest vendor to platform that grows with them, which is where Lumin wins.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="p-detail" id="p-risk">
+      <div class="panel-box gold">
+        <div class="p-row">
+          <div class="p-row-label">What they ask</div>
+          <div class="p-row-body">&ldquo;What happens to my core integration and my uptime once Solaire layers on top?&rdquo;</div>
+        </div>
+        <div class="p-row">
+          <div class="p-row-label">What worries them</div>
+          <div class="p-row-body">They&rsquo;ve lived through a legacy vendor&rsquo;s overnight-outage upgrade. &ldquo;AI-native&rdquo; can sound like a rip-and-replace they&rsquo;d have to explain to the board.</div>
+        </div>
+        <div class="p-row">
+          <div class="p-row-label">I&rsquo;d lead with</div>
+          <div class="p-row-body">The uptime number, paired with a peer reference already on Lumin&rsquo;s site: a CTO calling their conversion one of the smoothest their credit union has run. Solaire is a layer on trusted infrastructure, not a new migration.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="p-detail" id="p-member">
+      <div class="panel-box gold">
+        <div class="p-row">
+          <div class="p-row-label">What they ask</div>
+          <div class="p-row-body">&ldquo;Will members actually notice this, or is it another back-office tool nobody sees?&rdquo;</div>
+        </div>
+        <div class="p-row">
+          <div class="p-row-label">What worries them</div>
+          <div class="p-row-body">A chatbot that gives a wrong answer becomes their support-queue problem, not IT&rsquo;s.</div>
+        </div>
+        <div class="p-row">
+          <div class="p-row-label">I&rsquo;d lead with</div>
+          <div class="p-row-body">FAQ Assistant learns from that FI&rsquo;s own Secure Message volume and search behavior, not a generic knowledge base. That&rsquo;s &ldquo;the platform got better at knowing our members,&rdquo; not &ldquo;we added a chatbot.&rdquo;</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 03 COMPETITIVE ============ -->
+<section class="part" id="competitive">
+  <div class="wrap">
+    <div class="sec-label rv"><span class="sec-num">03</span><span class="sec-title">Competitive Position</span></div>
+    <h2 class="part-h rv">Why wouldn&rsquo;t an FI just go with the bigger name?</h2>
+    <p class="part-lead rv">Alkami, Q2, and Backbase show up in the same RFPs. None are the wrong choice for every institution. Here&rsquo;s the honest read, and the angle I&rsquo;d take against each.</p>
+
+    <div class="comp-table rv">
+      <div class="comp-row comp-head-row">
+        <div class="comp-cell">Platform</div>
+        <div class="comp-cell">Genuinely strong at</div>
+        <div class="comp-cell">The angle I&rsquo;d take</div>
+      </div>
+      <div class="comp-row">
+        <div class="comp-cell"><span class="comp-tool">Alkami</span></div>
+        <div class="comp-cell">Public company scale, single-code-base updates, J.D. Power certified mobile experience.</div>
+        <div class="comp-cell">I&rsquo;d counter scale with specificity: an independently validated compounding-value curve beats a certification badge.</div>
+      </div>
+      <div class="comp-row">
+        <div class="comp-cell"><span class="comp-tool">Q2</span></div>
+        <div class="comp-cell">Deep bench in community banks and credit unions, strong integrations including Salesforce.</div>
+        <div class="comp-cell">I&rsquo;d target their known gap: thinner commercial coverage. Lumin runs retail and commercial on one architecture, AI already live.</div>
+      </div>
+      <div class="comp-row">
+        <div class="comp-cell"><span class="comp-tool">Backbase</span></div>
+        <div class="comp-cell">AI-powered engagement platform spanning retail, business, wealth, and lending.</div>
+        <div class="comp-cell">I&rsquo;d trade their breadth for Lumin&rsquo;s depth: near-90 NPS and zero churn, concentrated proof from the exact segment evaluating it.</div>
+      </div>
+      <div class="comp-row">
+        <div class="comp-cell"><span class="comp-tool">Narmi</span></div>
+        <div class="comp-cell">Faster-moving, modern account-opening pitch that lands early in an RFP.</div>
+        <div class="comp-cell">I&rsquo;d lead with track record: multi-year references and an S&amp;P-validated ROI study a newer platform can&rsquo;t match yet.</div>
+      </div>
+    </div>
+
+    <div class="pull rv">Every one of them can demo well. None of them has a third-party study proving the value curve bends up, not flat. That&rsquo;s the argument I&rsquo;d lead with, every time.</div>
+  </div>
+</section>
+
+<!-- ============ 04 SALES ENABLEMENT ============ -->
+<section class="part" id="enablement">
+  <div class="wrap">
+    <div class="sec-label rv"><span class="sec-num">04</span><span class="sec-title">Sales Enablement</span></div>
+    <h2 class="part-h rv">A battlecard for the objection reps are already hearing</h2>
+    <p class="part-lead rv">Every core processor now ships some AI assistant. That&rsquo;s probably the most common objection reps hear on a Solaire call. Here&rsquo;s how I&rsquo;d equip them to answer it.</p>
+
+    <div class="bcard rv">
+      <div class="bcard-q">When the prospect says: <strong>&ldquo;Our core already shipped an AI assistant. Why do we need Lumin&rsquo;s?&rdquo;</strong></div>
+      <div class="bcard-a">I&rsquo;d train reps to ask one question before comparing chatbots: <strong>&ldquo;Does that assistant see what your marketing tools and member service queue see, or only what&rsquo;s inside the core?&rdquo;</strong> Most core-native AI only sees balances and transactions, not app searches, campaign clicks, or last week&rsquo;s support chat.<br><br>Solaire runs on one data foundation across the whole platform. That&rsquo;s why <strong>FAQ Assistant</strong> can pull from Secure Message topics and in-app search in the same breath, not two systems sharing a login screen.</div>
+      <div class="bcard-then">Then send: Solaire Assist&rsquo;s production case examples, not the roadmap deck. Shipped and in daily use, not a promise.</div>
+      <div class="bcard-why"><strong>Why it works:</strong> arguing whose AI is smarter is a demo-off Lumin doesn&rsquo;t need to win. The data-unification question is one a prospect&rsquo;s own IT team wants answered anyway, and it&rsquo;s where a bolt-on assistant structurally can&rsquo;t compete.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 05 METRICS ============ -->
+<section class="part" id="metrics">
+  <div class="wrap">
+    <div class="metrics-head rv">
+      <span class="sec-label" style="margin:0;"><span class="sec-num">05</span><span class="sec-title">Success Metrics</span></span>
+      <span class="metrics-sub">Day-90 signals that the positioning shift actually moved something</span>
+    </div>
+    <div class="metrics-grid rv">
+      <div class="metric-card">
+        <span class="metric-cat">Content</span>
+        <p>Time on page for the 451 Research study, Lumin&rsquo;s strongest single asset</p>
+      </div>
+      <div class="metric-card">
+        <span class="metric-cat">Enablement</span>
+        <p>% of reps using the updated Solaire battlecard in the first 30 days</p>
+      </div>
+      <div class="metric-card">
+        <span class="metric-cat">Win / loss</span>
+        <p>Share of closed-lost deals citing AI or architecture, tracked quarterly</p>
+      </div>
+      <div class="metric-card">
+        <span class="metric-cat">Pipeline</span>
+        <p>Pipeline influenced by Solaire or growth-research content, apart from net-new</p>
+      </div>
+      <div class="metric-card">
+        <span class="metric-cat">Awareness</span>
+        <p>Search share against Alkami, Q2, and Backbase on RFP-stage queries</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 06 OTHER RELEVANT WORK ============ -->
+<section class="part" id="work" style="border-bottom:none;">
+  <div class="wrap">
+    <div class="sec-label rv"><span class="sec-num">06</span><span class="sec-title">Other Relevant Work</span></div>
+    <h2 class="part-h rv">Five samples worth a look</h2>
+
+    <div class="wgrid rv">
+      <a class="wcard" href="https://bhanuexcalibur.github.io/Stripe/" target="_blank" rel="noopener">
+        <span class="wcard-tag">Full PoW &nbsp;&middot;&nbsp; Payments infrastructure</span>
+        <h4>Stripe</h4>
+        <p>Pricing audit and segment messaging across a founder, a mid-market CFO, and enterprise procurement. Same three-register problem as Lumin&rsquo;s CEO, CTO, and CXO committee.</p>
+        <span class="wcard-arr">&rarr;</span>
+      </a>
+
+      <a class="wcard" href="https://bhanuexcalibur.github.io/Razorpay/" target="_blank" rel="noopener">
+        <span class="wcard-tag">Full PoW &nbsp;&middot;&nbsp; Fintech infrastructure</span>
+        <h4>Razorpay</h4>
+        <p>Messaging audit and objection cards for a product whose ambition has outgrown its own story. Same gap Lumin has with Solaire.</p>
+        <span class="wcard-arr">&rarr;</span>
+      </a>
+
+      <a class="wcard" href="https://bhanuexcalibur.github.io/CashFree/" target="_blank" rel="noopener">
+        <span class="wcard-tag">Full PoW &nbsp;&middot;&nbsp; Payments / competitive</span>
+        <h4>Cashfree Payments</h4>
+        <p>A GTM brief built around a real battlecard for naming a rival tool directly. The structural twin of the Solaire objection card above.</p>
+        <span class="wcard-arr">&rarr;</span>
+      </a>
+
+      <a class="wcard" href="https://bhanuexcalibur.github.io/RelayFi_PoW/" target="_blank" rel="noopener">
+        <span class="wcard-tag">Full PoW &nbsp;&middot;&nbsp; Business banking</span>
+        <h4>Relay Financial</h4>
+        <p>Owner persona map and GTM brief for one platform, three account holders. Closest match to the FI persona work above.</p>
+        <span class="wcard-arr">&rarr;</span>
+      </a>
+
+      <a class="wcard full" href="https://bhanuexcalibur.github.io/RevolutBusiness/" target="_blank" rel="noopener">
+        <span class="wcard-tag">Full PoW &nbsp;&middot;&nbsp; Business banking / competitive</span>
+        <h4>Revolut Business</h4>
+        <p>Persona-based positioning across three B2B buyer types, a competitive audit against Wise and Stripe, and a 90-day GTM blueprint. The closest prior work to the full arc built for Lumin: narrative, personas, competitive read, and a phased plan.</p>
+        <span class="wcard-arr">&rarr;</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- SIGNATURE -->
+<div class="wrap">
+  <div class="sig">
+    <div>
+      <div class="sig-name">Bhanu <span>Kumar</span></div>
+      <div class="sig-links">
+        <a href="mailto:bhanukumar0902@gmail.com">bhanukumar0902@gmail.com</a><br>
+        <a href="https://linkedin.com/in/bhanuexcalibur" target="_blank" rel="noopener">linkedin.com/in/bhanuexcalibur</a>
+      </div>
+    </div>
+    <div class="sig-btns">
+      <a class="sbtn pri" href="mailto:bhanukumar0902@gmail.com">
+        Get in touch
+        <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2.5 6.5h8M7.5 3.5l3 3-3 3" stroke="#241505" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <a class="sbtn ghost" href="https://drive.google.com/file/d/1M2u7NORjhwYnRDJRi8tHkIW1goUn8Oco/view" target="_blank" rel="noopener">Full resume &rarr;</a>
+    </div>
+  </div>
+  <div class="note">Verified against Lumin Digital&rsquo;s site, its Business Wire and PR Newswire releases, and coverage from Datos Insights, CB Insights, G2, and CCG Catalyst, as of July 2026. The hero chart&rsquo;s year 2 through 4 points are my interpolation at Lumin&rsquo;s own published 44% CAGR; only year 1 ($1.6M) and year 5 ($6.8M) are the study&rsquo;s figures, and the flat comparison line is illustrative, not a competitor&rsquo;s real number. The three personas are archetypes built from patterns across Lumin&rsquo;s public client case studies, not quotes from any individual.</div>
+</div>
+
+<script>
+/* === NAV TOGGLE === */
+function toggleMob(){
+  document.getElementById('hbg').classList.toggle('open');
+  document.getElementById('mobm').classList.toggle('open');
+}
+function closeMob(){
+  document.getElementById('hbg').classList.remove('open');
+  document.getElementById('mobm').classList.remove('open');
+}
+
+/* === PROGRESS BAR === */
+function updateProgress(){
+  var h = document.documentElement;
+  var pct = (h.scrollTop) / (h.scrollHeight - h.clientHeight) * 100;
+  document.getElementById('pbar').style.width = pct + '%';
+}
+window.addEventListener('scroll', updateProgress, {passive:true});
+
+/* === SCROLL REVEAL === */
+var rvIo = new IntersectionObserver(function(entries){
+  entries.forEach(function(e){
+    if(e.isIntersecting){ e.target.classList.add('in'); }
+  });
+},{threshold:0.12});
+document.querySelectorAll('.rv').forEach(function(el){ rvIo.observe(el); });
+
+/* === PERSONA PICKER === */
+function setPersona(key, btn){
+  document.querySelectorAll('#personaPicker .p-card').forEach(function(c){ c.classList.remove('on'); });
+  btn.classList.add('on');
+  document.querySelectorAll('.p-detail').forEach(function(d){ d.classList.remove('on'); });
+  document.getElementById('p-' + key).classList.add('on');
+}
+
+/* === COMPOUNDING GROWTH SIMULATOR === */
+(function(){
+  var slider = document.getElementById('yearSlider');
+  var reveal = document.getElementById('chartReveal');
+  var playhead = document.getElementById('playhead');
+  var yearLabel = document.getElementById('simYearLabel');
+  var valueLabel = document.getElementById('simValueLabel');
+  var gapLabel = document.getElementById('simGapLabel');
+  var yearTop = document.querySelector('.sim-ctrl .sim-year:first-child');
+
+  // value(year) interpolated along the published 44% CAGR between yr1=1.6 and yr5=6.8
+  function valueAt(year){
+    var y1 = 1.6;
+    var cagr = 1.44;
+    return y1 * Math.pow(cagr, year - 1);
+  }
+
+  var pending = null;
+  var rafScheduled = false;
+
+  function applyFrame(year){
+    var pct = ((year - 1) / 4) * 100;
+    reveal.style.width = pct + '%';
+    playhead.style.left = pct + '%';
+    var val = valueAt(year);
+    yearLabel.textContent = year.toFixed(1).replace(/\.0$/, '');
+    valueLabel.textContent = val.toFixed(1);
+    gapLabel.textContent = (val - 1.6).toFixed(1);
+  }
+
+  function scheduleFrame(year){
+    pending = year;
+    if(!rafScheduled){
+      rafScheduled = true;
+      requestAnimationFrame(function(){
+        applyFrame(pending);
+        rafScheduled = false;
+      });
+    }
+  }
+
+  slider.addEventListener('input', function(){
+    scheduleFrame(parseFloat(slider.value));
+  }, {passive:true});
+
+  /* auto-demo: sweep 1 -> 5 shortly after paint */
+  function autoDemo(){
+    var start = null;
+    var dur = 1500;
+    function step(ts){
+      if(!start) start = ts;
+      var p = Math.min((ts - start) / dur, 1);
+      var year = 1 + p * 4;
+      slider.value = year;
+      applyFrame(year);
+      if(p < 1){ requestAnimationFrame(step); }
+    }
+    requestAnimationFrame(step);
+  }
+  setTimeout(autoDemo, 420);
+})();
+</script>
+
+</body>
+</html>
